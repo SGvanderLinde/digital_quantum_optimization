@@ -1,8 +1,8 @@
-"""This module contains the QUBO object and related helper functions."""
+"""Contains the QUBO object and related helper functions."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, SupportsFloat
+from typing import TYPE_CHECKING, SupportsFloat
 
 import numpy as np
 
@@ -23,6 +23,7 @@ class QUBO:
         Args:
             matrix: 2-D square ArrayLike representstion of the QUBO matrix.
             offset: Optional offset of the problem. Default value is 0.0.
+
         """
         self._matrix = np.array(matrix, dtype=np.float64)
         self._offset = float(offset)
@@ -35,6 +36,7 @@ class QUBO:
         Returns:
             Tuple containing the interactions, bias terms and ofsett of the Lenz-Ising
             problem.
+
         """
         interactions = 0.25 * np.triu(self._matrix + self._matrix.T, k=1)
         bias_terms = -0.25 * (self._matrix.sum(axis=0) + self._matrix.sum(axis=1))
@@ -52,6 +54,7 @@ class QUBO:
 
         Returns:
             Corresponding value of the provided `bits`.
+
         """
         bits = np.asarray(bits, dtype=np.uint8)
         value = bits @ self._matrix @ bits + self._offset
@@ -60,10 +63,12 @@ class QUBO:
     def brute_force(self) -> tuple[NDArray[np.uint8], float]:
         """Find the optimal bits-value pair of the QUBO problem using brute force.
 
-        This is a naive brute force implementation with a computational complexity of $O(2^n n^2)$.
+        This is a naive brute force implementation with a computational complexity of
+        $O(2^n n^2)$.
 
         Returns:
             Tuple with the optimal bits and optimal value of the QUBO problem.
+
         """
         best_value = self._offset
         best_bits = np.zeros(len(self), dtype=np.uint8)
@@ -78,11 +83,11 @@ class QUBO:
         return best_bits, best_value
 
     def __len__(self) -> int:
-        """Number of variables of the QUBO problem."""
+        """Get the number of variables of the QUBO problem."""
         return int(self._matrix.shape[0])
 
-    def __eq__(self, other: Any) -> bool:
-        """Returns true if self is equal to other.
+    def __eq__(self, other: object) -> bool:
+        """Return true if self is equal to other.
 
         Two QUBO object are equal if their offsets are equal and their matrices are
         equal in symmetric form.
@@ -92,6 +97,7 @@ class QUBO:
 
         Returns:
             Boolean value stating wether the two QUBO objects are equal.
+
         """
         if not isinstance(other, QUBO):
             return False

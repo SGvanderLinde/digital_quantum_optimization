@@ -55,7 +55,10 @@ def test_random_number_partitioning_problem_seed() -> None:
     [([1, 3, 2], [0, 1], [1, 2], [3]), ([1], [], [1], [])],
 )
 def test_decode_number_partitioning_bits(
-    numbers: ArrayLike, bits: ArrayLike, expected_p1: ArrayLike, expected_p2: ArrayLike
+    numbers: ArrayLike,
+    bits: ArrayLike,
+    expected_p1: ArrayLike,
+    expected_p2: ArrayLike,
 ) -> None:
     partition1, partition2 = decode_number_partitioning_bits(numbers, bits)
 

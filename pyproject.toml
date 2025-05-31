@@ -36,22 +36,76 @@ Repository = "https://github.com/me/spam.git"
 "Bug Tracker" = "https://github.com/me/spam/issues"
 Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
+[tool.ruff]
+target-version = "py310"
+
 [tool.ruff.lint]
 select = [
     "A",
     "ANN",
+    "ARG",
     "ASYNC",
     "B",
     "BLE",
+    "COM",
+    "C4",
+    "C90",
+    #"D",
+    "DJ",
+    "DTZ",
+    "E",
     "ERA",
+    "EM",
+    "EXE",
+    "F",
+    "FA",
     "FBT",
+    "FIX",
+    "FLY",
+    "RUF",
+    "FURB",
+    "G",
     "I",
+    "ICN",
+    "INP",
+    "INT",
+    "ISC",
+    "LOG",
+    "N",
+    "NPY",
+    "PD",
+    "PERF",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PTH",
+    "PYI",
+    "Q",
+    "RET",
+    "RSE",
     "S",
+    "SIM",
+    "SLF",
+    "SLOT",
+    "TC",
+    "TD",
+    "TID",
+    "TRY",
+    "T10",
+    "T20",
+    "UP",
+    "W",
     "YTT",
 ]
 ignore = [
     "ANN401",
+    "COM812",
+    "D203",
+    "D211",
+    "D213",
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"test/**" = ["S101"]
+"test/**" = ["D", "INP", "S101"]
+"experiments/**" = ["T20", "INP"]

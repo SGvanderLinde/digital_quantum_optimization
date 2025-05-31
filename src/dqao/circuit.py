@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, SupportsFloat, SupportsInt
+from typing import TYPE_CHECKING, MappingProxyType, SupportsFloat, SupportsInt
 
 import numpy as np
 import pennylane as qml
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class CounterDiabaticQuantumOptimizer:
-    metadata = {"counter_diabatic_layer_types": {"y", "yzy", None}}
+    metadata = MappingProxyType({"counter_diabatic_layer_types": {"y", "yzy", None}})
 
     def __init__(
         self,
@@ -94,11 +94,15 @@ class CounterDiabaticQuantumOptimizer:
         Returns:
             Dictionary with samples. Each key is a bitstring and each correspending
             value is the numner of times that bitstring was measured.
+
         """
         return self.sample_lenz_ising(*qubo.to_lenz_ising())
 
     def sample_lenz_ising(
-        self, interactions: ArrayLike, bias_terms: ArrayLike, offset: SupportsFloat = 0
+        self,
+        interactions: ArrayLike,
+        bias_terms: ArrayLike,
+        offset: SupportsFloat = 0,  # noqa: ARG002
     ) -> dict[str, int]:
         """Sample a Lenz-Ising problem.
 
@@ -114,6 +118,7 @@ class CounterDiabaticQuantumOptimizer:
         Returns:
             Dictionary with samples. Each key is a bitstring and each correspending
             value is the numner of times that bitstring was measured.
+
         """
         circuit = self.build_qnode(interactions, bias_terms)
         return circuit()
@@ -127,7 +132,11 @@ class CounterDiabaticQuantumOptimizer:
         bias_terms /= norm_constant
 
         circuit = QFunc(
-            bias_terms, interactions, self._n_layers, self._cd_layer, self._end_time
+            bias_terms,
+            interactions,
+            self._n_layers,
+            self._cd_layer,
+            self._end_time,
         )
 
         return qml.QNode(circuit, self._device)
@@ -242,7 +251,7 @@ class CDLayerY:
 
 
 class CDLayerNull:
-    def __call__(self, strength: float, strength_grad: float) -> None:
+    def __call__(self, strength: float, strength_grad: float) -> None:  # noqa: ARG002
         return None
 
 
@@ -252,7 +261,8 @@ class CDLayerYZY:
         self._interactions = np.asarray(interactions, dtype=np.float64)
 
         const1, const2, const3 = self._compute_schedule_consts(
-            self._bias_terms, self._interactions
+            self._bias_terms,
+            self._interactions,
         )
         self._const1 = const1
         self._const2 = const2
@@ -267,7 +277,8 @@ class CDLayerYZY:
 
     @staticmethod
     def _compute_schedule_consts(
-        bias_terms: NDArray[np.float64], interactions: NDArray[np.float64]
+        bias_terms: NDArray[np.float64],
+        interactions: NDArray[np.float64],
     ) -> tuple[float, float, float]:
         n_qubits = len(bias_terms)
         const1 = np.sum(bias_terms**2) + 8 * np.sum(interactions**2)

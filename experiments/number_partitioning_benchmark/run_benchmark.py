@@ -65,8 +65,8 @@ def run_optimizer(qubo: QUBO, n_layers: int, cd_type: str, noise: float) -> floa
 
 
 def build_noise_model(noise: float) -> qml.NoiseModel:
-    cond1 = qml.BooleanFn(lambda x: True)
-    cond2 = qml.BooleanFn(lambda x: True)
+    cond1 = qml.BooleanFn(lambda _: True)
+    cond2 = qml.BooleanFn(lambda _: True)
     noise1 = qml.noise.partial_wires(qml.AmplitudeDamping, noise)
     noise2 = qml.noise.partial_wires(qml.DepolarizingChannel, noise)
     return qml.NoiseModel({cond1: noise1, cond2: noise2})

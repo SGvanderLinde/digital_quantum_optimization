@@ -49,7 +49,9 @@ def test_to_lenz_ising(qubo: QUBO) -> None:
 
 def test_brute_force(qubo: QUBO) -> None:
     optimal_bits, optimal_value = qubo.brute_force()
-    assert optimal_value == 10
+
+    expected_value = 10
+    assert optimal_value == expected_value
     np.testing.assert_equal(optimal_bits, [0, 0, 0])
 
 
@@ -59,12 +61,15 @@ def test_brute_force2() -> None:
     qubo = QUBO(matrix, offset)
     optimal_bits, optimal_value = qubo.brute_force()
 
-    assert optimal_value == -15
+    expected_value = -15
+
+    assert optimal_value == expected_value
     np.testing.assert_equal(optimal_bits, [1, 0, 1])
 
 
 def test_len(qubo: QUBO) -> None:
-    assert len(qubo) == 3
+    qubo_size = 3
+    assert len(qubo) == qubo_size
 
 
 @pytest.mark.parametrize(

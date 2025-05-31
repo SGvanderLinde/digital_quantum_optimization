@@ -1,3 +1,5 @@
+"""Helper methods to optimize parameters of the CounterDiabaticQuantumOptimizer."""
+
 from __future__ import annotations
 
 import functools
@@ -7,15 +9,26 @@ import numpy as np
 from skopt import gp_minimize
 from skopt.space import Real
 
-from dqao import CounterDiabaticQuantumOptimizer as CDQOptimizer
-
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from dqao import QUBO
+    from dqao import CounterDiabaticQuantumOptimizer as CDQOptimizer
 
 
 def optimize_cdqo(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:
+    """Optimize the `end_time` hyperparameter of the CounterDiabaticQuantumOptimizer.
+
+    Optimization is performed using Baysian optimization.
+
+    Args:
+        cdqo: CounterDiabaticQuantumOptimizer to optimze the `end_time` for.
+        qubo: QUBO problem to optimize for.
+
+    Returns:
+        Result of the best parameter.
+
+    """
     score_func = functools.partial(_score_function, cdqo, qubo)
     search_space = [Real(0.1, 10)]
 
@@ -32,6 +45,18 @@ def optimize_cdqo(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:
 
 
 def optimize_cdqo_gridsearch(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:
+    """Optimize the `end_time` hyperparameter of the CounterDiabaticQuantumOptimizer.
+
+    Optimization is performed using a gridsearch.
+
+    Args:
+        cdqo: CounterDiabaticQuantumOptimizer to optimze the `end_time` for.
+        qubo: QUBO problem to optimize for.
+
+    Returns:
+        Result of the best parameter.
+
+    """
     best_score = float("inf")
     end_times = np.power(np.linspace(-1, 1, 20), 10)
 
@@ -46,7 +71,9 @@ def optimize_cdqo_gridsearch(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:
 
 
 def _score_function(
-    cdqo: CDQOptimizer, qubo: QUBO, end_time: Sequence[SupportsFloat]
+    cdqo: CDQOptimizer,
+    qubo: QUBO,
+    end_time: Sequence[SupportsFloat],
 ) -> float:
     cdqo.end_time = end_time[0]
     counts = cdqo.sample_qubo(qubo)

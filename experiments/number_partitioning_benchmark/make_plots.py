@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 if TYPE_CHECKING:
-    from numpy.typing import ArrayLike, NDArray
+    from numpy.typing import NDArray
 
     data_type = dict[str, tuple[NDArray[np.int_], NDArray[np.float64]]]
 
@@ -71,7 +71,10 @@ def bar_plot(n_numbers: int, data: data_type) -> None:
 
     mean_x_data = np.mean(np.vstack(list(x_data.values())), axis=0)
     ax.hlines(
-        2 ** (1 - n_numbers), mean_x_data[0] - 1, mean_x_data[-1] + 1, label="Random"
+        2 ** (1 - n_numbers),
+        mean_x_data[0] - 1,
+        mean_x_data[-1] + 1,
+        label="Random",
     )
 
     ax.set_xticks(mean_x_data, all_noise)

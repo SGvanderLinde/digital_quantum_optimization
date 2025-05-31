@@ -37,6 +37,7 @@ def build_number_partitioning_qubo(numbers: ArrayLike) -> QUBO:
 
     Returns:
         A number partitioning problem instance represented as a QUBO problem.
+
     """
     numbers = np.asarray(numbers)
     if numbers.ndim != 1:
@@ -47,14 +48,15 @@ def build_number_partitioning_qubo(numbers: ArrayLike) -> QUBO:
         raise ValueError(error_msg)
     total = np.sum(numbers[1:])
     matrix = np.outer(numbers[1:], numbers[1:]) - np.diag(
-        (total - numbers[0]) * numbers[1:]
+        (total - numbers[0]) * numbers[1:],
     )
     offset = (total - numbers[0]) ** 2 / 4
     return QUBO(matrix, offset)
 
 
 def random_number_partitioning_qubo(
-    n_numbers: SupportsInt, seed: SupportsInt | None = None
+    n_numbers: SupportsInt,
+    seed: SupportsInt | None = None,
 ) -> tuple[NDArray[np.int_], QUBO]:
     """Build a random number partitoning QUBO problem with `n_numbers` numbers.
 
@@ -68,6 +70,7 @@ def random_number_partitioning_qubo(
     Returns:
         Tuple containing an array of random integers and corresponding QUBO problem.
         The array of integers has at least one equal sum partitioning.
+
     """
     n_numbers = int(n_numbers)
     rng = np.random.default_rng(seed)
@@ -88,7 +91,8 @@ def random_number_partitioning_qubo(
 
 
 def decode_number_partitioning_bits(
-    numbers: ArrayLike, bits: ArrayLike
+    numbers: ArrayLike,
+    bits: ArrayLike,
 ) -> tuple[NDArray[Any], NDArray[Any]]:
     """Decode a solution bitstring of the number partitioning QUBO formulation.
 
@@ -98,6 +102,7 @@ def decode_number_partitioning_bits(
 
     Returns:
         Tuple containg the two partitions.
+
     """
     numbers = np.asarray(numbers)
     bits = np.asarray(bits, dtype=np.uint8)

@@ -49,16 +49,22 @@ def run(matrix: ArrayLike, solution: str) -> None:
 
 
 def _pprint_iter(
-    n_layers: int, succ_none: float, succ_y: float, succ_yzy: float, end_time: float
+    n_layers: int,
+    succ_none: float,
+    succ_y: float,
+    succ_yzy: float,
+    end_time: float,
 ) -> None:
     print(
         f"{n_layers:>5} layers: {succ_none:.2%} {succ_y:.2%} {succ_yzy:.2%} "
-        f"({end_time:.1f})"
+        f"({end_time:.1f})",
     )
 
 
 def _plot_results(
-    x_axis: list[int], results: dict[str, list[float]], filepath: Path | str
+    x_axis: list[int],
+    results: dict[str, list[float]],
+    filepath: Path | str,
 ) -> None:
     fig, ax = plt.subplots()
     for name, y_axis in results.items():
