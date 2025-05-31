@@ -18,7 +18,7 @@ maintainers = [
 ]
 description = "Digital Quantum Adiabetic Optimization"
 readme = "README.rst"
-license = "Apache-2.0"
+license = "Unlicense"
 license-files = ["LICENCSE"]
 keywords = ["egg", "bacon", "sausage", "tomatoes", "Lobster Thermidor"]
 classifiers = [
