@@ -46,8 +46,8 @@ def test_random_number_partitioning_problem_seed() -> None:
     np.testing.assert_array_equal(numbers1, numbers2)
     assert any(numbers1 != numbers3)
 
-    qubo1 == qubo2
-    qubo1 != qubo3
+    assert qubo1 == qubo2
+    assert qubo1 != qubo3
 
 
 @pytest.mark.parametrize(

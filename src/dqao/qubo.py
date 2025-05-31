@@ -9,6 +9,7 @@ import numpy as np
 if TYPE_CHECKING:
     from numpy.typing import ArrayLike, NDArray
 
+
 class QUBO:
     """Representstion of a Quadratic Unconstrained Binary Optimiazation (QUBO) problem.
 

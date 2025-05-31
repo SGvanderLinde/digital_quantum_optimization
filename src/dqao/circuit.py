@@ -23,7 +23,7 @@ class CounterDiabaticQuantumOptimizer:
         device: qml.Device,
         counter_diabatic_layer: str | None = "y",
         end_time: SupportsFloat = 1.0,
-    ):
+    ) -> None:
         r"""Initialize the ``CounterDiabaticQuantumOptimizer``.
 
         Args:
@@ -100,7 +100,7 @@ class CounterDiabaticQuantumOptimizer:
     def sample_lenz_ising(
         self, interactions: ArrayLike, bias_terms: ArrayLike, offset: SupportsFloat = 0
     ) -> dict[str, int]:
-    """Sample a Lenz-Ising problem.
+        """Sample a Lenz-Ising problem.
 
         The Lenz-Ising model is encoded in the cost and counterdiabatic layers.
 
@@ -229,7 +229,7 @@ class CDLayerY:
     def n_qubits(self) -> int:
         return len(self._bias_terms)
 
-    def __call__(self, strength: float, strength_grad) -> None:
+    def __call__(self, strength: float, strength_grad: float) -> None:
         for i, bias in enumerate(self._bias_terms):
             angle = bias**2
             angle += np.sum(self._interactions[i] ** 2)
@@ -242,7 +242,7 @@ class CDLayerY:
 
 
 class CDLayerNull:
-    def __call__(self, strength: float, strength_grad) -> None:
+    def __call__(self, strength: float, strength_grad: float) -> None:
         return None
 
 

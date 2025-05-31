@@ -30,10 +30,11 @@ def optimize_cdqo(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:
     cdqo.end_time = result.x[0]
     return cdqo.sample_qubo(qubo)
 
+
 def optimize_cdqo_gridsearch(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:
     best_score = float("inf")
     end_times = np.power(np.linspace(-1, 1, 20), 10)
-    
+
     for end_time in end_times:
         score = _score_function(cdqo, qubo, [end_time])
         if score < best_score:

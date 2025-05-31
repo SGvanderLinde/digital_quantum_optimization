@@ -37,6 +37,21 @@ Repository = "https://github.com/me/spam.git"
 Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
 [tool.ruff.lint]
-select = ["I"]
-ignore = []
+select = [
+    "A",
+    "ANN",
+    "ASYNC",
+    "B",
+    "BLE",
+    "ERA",
+    "FBT",
+    "I",
+    "S",
+    "YTT",
+]
+ignore = [
+    "ANN401",
+]
 
+[tool.ruff.lint.per-file-ignores]
+"test/**" = ["S101"]

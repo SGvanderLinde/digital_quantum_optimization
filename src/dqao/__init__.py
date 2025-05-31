@@ -5,7 +5,7 @@ algorithm in digital hardware.
 """
 
 from dqao.circuit import CounterDiabaticQuantumOptimizer
-from dqao.optimize_circuit import optimize_cdqo, optimize_cdqo_gridsearch 
+from dqao.optimize_circuit import optimize_cdqo, optimize_cdqo_gridsearch
 from dqao.qubo import QUBO
 
 __all__ = [
