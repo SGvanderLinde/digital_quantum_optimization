@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 
-from dqao.benchmarking import (
+from digital_quantum_optimization.benchmarking import (
     build_number_partitioning_qubo,
     decode_number_partitioning_bits,
     random_number_partitioning_qubo,

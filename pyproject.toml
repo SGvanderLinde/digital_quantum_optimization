@@ -3,24 +3,25 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dqao"
+name = "digital_quantum_optimization"
 version = "0.0.1b1"
 dependencies = [
   "numpy",
   "pennylane",
+  "scikit-optimize",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
   {name = "Bob Varens", email = "bobvarens@example.com"},
 ]
 maintainers = [
   {name = "Bob Varens", email = "bobvarens@example.com"}
 ]
-description = "Digital Quantum Adiabetic Optimization"
+description = "Quantum optimization tools for digital quantum computers"
 readme = "README.rst"
 license = "Unlicense"
 license-files = ["LICENCSE"]
-keywords = ["egg", "bacon", "sausage", "tomatoes", "Lobster Thermidor"]
+keywords = ["Quantum Computing", "Digital", "sausOptimization", "QUBO", "Ising", "Lenz-Ising"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python"

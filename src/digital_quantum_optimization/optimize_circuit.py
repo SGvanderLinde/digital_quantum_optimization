@@ -12,8 +12,7 @@ from skopt.space import Real
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from dqao import QUBO
-    from dqao import CounterDiabaticQuantumOptimizer as CDQOptimizer
+    from digital_quantum_optimization import QUBO, CDQOptimizer
 
 
 def optimize_cdqo(cdqo: CDQOptimizer, qubo: QUBO) -> dict[str, int]:

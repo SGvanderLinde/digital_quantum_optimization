@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, MappingProxyType, SupportsFloat, SupportsInt
+from types import MappingProxyType
+from typing import TYPE_CHECKING, SupportsFloat, SupportsInt, TypeAlias
 
 import numpy as np
 import pennylane as qml
 
 if TYPE_CHECKING:
+    from digital_quantum_optimizatiob.qubo import QUBO
     from numpy.typing import ArrayLike, NDArray
     from pennylane.measurements import CountsMP
-
-    from dqao.qubo import QUBO
 
 
 class CounterDiabaticQuantumOptimizer:
@@ -315,3 +315,6 @@ class CDLayerYZY:
                     continue
                 qml.PauliRot(2 * angle * interaction, "YZ", wires=[i, j])
                 qml.PauliRot(2 * angle * interaction, "ZY", wires=[i, j])
+
+
+CDQOptimizer: TypeAlias = CounterDiabaticQuantumOptimizer

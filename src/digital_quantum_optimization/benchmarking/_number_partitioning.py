@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING, Any, SupportsInt
 
 import numpy as np
 
-from dqao import QUBO
+import digital_quantum_optimization as dqo
 
 if TYPE_CHECKING:
     from numpy.typing import ArrayLike, NDArray
 
 
-def build_number_partitioning_qubo(numbers: ArrayLike) -> QUBO:
+def build_number_partitioning_qubo(numbers: ArrayLike) -> dqo.QUBO:
     r"""Build a number partitioning problem for the provided `numbers`.
 
     The goal of the number paritioning problem is to find partition the numbers into
@@ -51,13 +51,13 @@ def build_number_partitioning_qubo(numbers: ArrayLike) -> QUBO:
         (total - numbers[0]) * numbers[1:],
     )
     offset = (total - numbers[0]) ** 2 / 4
-    return QUBO(matrix, offset)
+    return dqo.QUBO(matrix, offset)
 
 
 def random_number_partitioning_qubo(
     n_numbers: SupportsInt,
     seed: SupportsInt | None = None,
-) -> tuple[NDArray[np.int_], QUBO]:
+) -> tuple[NDArray[np.int_], dqo.QUBO]:
     """Build a random number partitoning QUBO problem with `n_numbers` numbers.
 
     Builds an array if integer values such that there exists a partitioning which has

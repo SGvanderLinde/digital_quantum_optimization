@@ -5,17 +5,17 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 
-from dqao import QUBO
+import digital_quantum_optimization as dqo
 
 if TYPE_CHECKING:
     from numpy.typing import ArrayLike
 
 
 @pytest.fixture(name="qubo")
-def qubo_fixture() -> QUBO:
+def qubo_fixture() -> dqo.QUBO:
     matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     offset = 10
-    return QUBO(matrix, offset)
+    return dqo.QUBO(matrix, offset)
 
 
 @pytest.mark.parametrize(
@@ -31,11 +31,11 @@ def qubo_fixture() -> QUBO:
         ([1, 1, 1], 55),
     ],
 )
-def test_evaluate(qubo: QUBO, bits: ArrayLike, expected_value: float) -> None:
+def test_evaluate(qubo: dqo.QUBO, bits: ArrayLike, expected_value: float) -> None:
     assert qubo.evaluate(bits) == expected_value
 
 
-def test_to_lenz_ising(qubo: QUBO) -> None:
+def test_to_lenz_ising(qubo: dqo.QUBO) -> None:
     expected_interactions = [[0, 1.5, 2.5], [0, 0, 3.5], [0, 0, 0]]
     expected_bias_terms = [-4.5, -7.5, -10.5]
     expected_offset = 25
@@ -47,7 +47,7 @@ def test_to_lenz_ising(qubo: QUBO) -> None:
     assert offset == expected_offset
 
 
-def test_brute_force(qubo: QUBO) -> None:
+def test_brute_force(qubo: dqo.QUBO) -> None:
     optimal_bits, optimal_value = qubo.brute_force()
 
     expected_value = 10
@@ -58,7 +58,7 @@ def test_brute_force(qubo: QUBO) -> None:
 def test_brute_force2() -> None:
     matrix = [[1, 2, -10], [0, -1, 3], [0, 0, 4]]
     offset = -10
-    qubo = QUBO(matrix, offset)
+    qubo = dqo.QUBO(matrix, offset)
     optimal_bits, optimal_value = qubo.brute_force()
 
     expected_value = -15
@@ -67,7 +67,7 @@ def test_brute_force2() -> None:
     np.testing.assert_equal(optimal_bits, [1, 0, 1])
 
 
-def test_len(qubo: QUBO) -> None:
+def test_len(qubo: dqo.QUBO) -> None:
     qubo_size = 3
     assert len(qubo) == qubo_size
 
@@ -75,23 +75,23 @@ def test_len(qubo: QUBO) -> None:
 @pytest.mark.parametrize(
     ("qubo1", "qubo2"),
     [
-        (QUBO([], 0), QUBO(np.empty(0), 0.0)),
-        (QUBO([[1, 2], [3, 4]], 5), QUBO([[1, 2], [3, 4]], 5)),
-        (QUBO([[1, 2], [-2, -1]]), QUBO([[1, 0], [0, -1]])),
+        (dqo.QUBO([], 0), dqo.QUBO(np.empty(0), 0.0)),
+        (dqo.QUBO([[1, 2], [3, 4]], 5), dqo.QUBO([[1, 2], [3, 4]], 5)),
+        (dqo.QUBO([[1, 2], [-2, -1]]), dqo.QUBO([[1, 0], [0, -1]])),
     ],
 )
-def test_eq(qubo1: QUBO, qubo2: QUBO) -> None:
+def test_eq(qubo1: dqo.QUBO, qubo2: dqo.QUBO) -> None:
     assert qubo1 == qubo2
 
 
 @pytest.mark.parametrize(
     ("qubo1", "qubo2"),
     [
-        (QUBO([], 0), QUBO([], 1)),
-        (QUBO([[1, 2], [3, 4]], 5), QUBO([[1, 2], [3, 4]], 6)),
-        (QUBO([[1, 2], [3, 4]]), QUBO([[1, 2], [3, -4]])),
-        (QUBO(np.zeros((2, 2))), QUBO(np.zeros((3, 3)))),
+        (dqo.QUBO([], 0), dqo.QUBO([], 1)),
+        (dqo.QUBO([[1, 2], [3, 4]], 5), dqo.QUBO([[1, 2], [3, 4]], 6)),
+        (dqo.QUBO([[1, 2], [3, 4]]), dqo.QUBO([[1, 2], [3, -4]])),
+        (dqo.QUBO(np.zeros((2, 2))), dqo.QUBO(np.zeros((3, 3)))),
     ],
 )
-def test_nq(qubo1: QUBO, qubo2: QUBO) -> None:
+def test_nq(qubo1: dqo.QUBO, qubo2: dqo.QUBO) -> None:
     assert qubo1 != qubo2
