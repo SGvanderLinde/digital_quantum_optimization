@@ -1,3 +1,5 @@
+"""Moduke containing layers for digital quantum optimization circuits."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, SupportsInt
@@ -11,14 +13,44 @@ if TYPE_CHECKING:
 
 class CostLayer:
     def __init__(self, bias_terms: ArrayLike, interactions: ArrayLike) -> None:
+        """Init the CostLayer.
+
+        Args:
+            bias_terms: 1D-ArrayLike representing the bias terms of a Lenz-Ising
+                problem. These are the linear terms of the problem.
+            interactions: 2D-ArrayLike representing the interaction terms of the
+                Lenz-Ising problem. These are the quadratic terms of the problem.
+        """
         self._bias_terms = np.asarray(bias_terms, dtype=np.float64)
         self._interactions = np.asarray(interactions, dtype=np.float64)
 
     @property
     def n_qubits(self) -> int:
+        """Number of qubits used by the circuit."""
         return len(self._bias_terms)
 
     def __call__(self, angle: float) -> None:
+        r"""Apply the cost layer.
+
+        The cost layer is defined as
+
+        .. math::
+
+            \theta \\left(
+                \\sum_{i=1}^N h_i Z_i + \\sum_{i=1}^N\\sum_{j=i+1}^NJ_{ij}Z_iZ_j
+            \right).
+
+        **Notation**
+
+        * $h_i$: linear bias term $i$ of the Lenz-Ising model.
+        * $J_{ij}$: quadratic interaction term acting on qubits $i$ and $j$.
+        * $N$: number of spins in the Lenz-Ising model.
+        * $Z_i$: Pauli-Z operator acting on qubit $i$.
+        * $\theta$: angle provided to the call of this method.
+
+        Args:
+            angle: $\theta$ to use when applying the cost layer.
+        """
         for i in range(self.n_qubits):
             for j in range(i + 1, self.n_qubits):
                 interaction = self._interactions[i, j]
@@ -33,27 +65,99 @@ class CostLayer:
 
 class InitialLayer:
     def __init__(self, n_qubits: SupportsInt) -> None:
+        """Initialze the InitialLayer.
+
+        Args:
+            n_qubits: number of qubits.
+        """
         self._n_qubits = int(n_qubits)
 
     def prep(self) -> None:
+        """State preperation for this InitialLayer.
+
+        For the adiabatic/counterdiabatic quantum optimization protocol, the qubits
+        need to be prepared in the ground state of the initial Hamiltonian. For this
+        initial Hamiltonian the ground state is a equal superposition, i.e.,
+
+        .. math::
+
+            \\sum_{i=1}^N |+\rangle.
+
+        **Notation**
+
+        * $N$: number of spins in the Lenz-Ising model.
+        """
         for i in range(self._n_qubits):
             qml.Hadamard(wires=i)
 
     def __call__(self, angle: float) -> None:
+        r"""Apply the layer of an initial Hamiltonian.
+        The initial Hamiltonian refers to the initial Hamiltonian in the
+        adiabatic/counterdiabatic quantum optimization protocol.
+
+        The initial layer is defined as
+
+        .. math::
+
+            \theta \sum_{i=1}^N X_i.
+
+        **Notation**
+
+        * $N$: number of spins in the Lenz-Ising model.
+        * $X_i$: Pauli-X operator acting on qubit $i$.
+        * $\theta$: angle provided to the call of this method.
+
+        Args:
+            angle: $\theta$ to use when applying the initial layer.
+        """
         for i in range(self._n_qubits):
             qml.RX(-2 * (1 - angle), wires=i)
 
 
 class CDLayerY:
     def __init__(self, bias_terms: ArrayLike, interactions: ArrayLike) -> None:
+        """Init the CDLayerY.
+
+        Args:
+            bias_terms: 1D-ArrayLike representing the bias terms of a Lenz-Ising
+                problem. These are the linear terms of the problem.
+            interactions: 2D-ArrayLike representing the interaction terms of the
+                Lenz-Ising problem. These are the quadratic terms of the problem.
+        """
         self._bias_terms = np.asarray(bias_terms, dtype=np.float64)
         self._interactions = np.asarray(interactions, dtype=np.float64)
 
     @property
     def n_qubits(self) -> int:
+        """Number of qubits used by the circuit."""
         return len(self._bias_terms)
 
     def __call__(self, strength: float, strength_grad: float) -> None:
+        r"""Apply the Y counterdiabatic layer.
+
+        The Y counterdiabatic layer is defined as
+
+        .. math::
+
+            \dot{\lambda(t)}\frac{h_i}{2}
+            \sum_{i=1}^NY_i
+            \left[
+            (\lambda(t)-1)^2
+            + \lambda(t)^2\left(h_i^2 + \sum_{j=1}^N(J_{ij} + J_{ji})\right)
+            \right]
+
+        **Notation**
+
+        * $h_i$: linear bias term $i$ of the Lenz-Ising model.
+        * $J_{ij}$: quadratic interaction term acting on qubits $i$ and $j$.
+        * $N$: number of spins in the Lenz-Ising model.
+        * $Y_i$: Pauli-Y operator acting on qubit $i$.
+        * $\lambda$: strength schedule.
+
+        Args:
+            strength: strength of the schedule at timestep $t$.
+            strength_grad: gradient strength of the schedule at timestep $t$.
+        """
         for i, bias in enumerate(self._bias_terms):
             angle = bias**2
             angle += np.sum(self._interactions[i] ** 2)
@@ -62,16 +166,25 @@ class CDLayerY:
             angle += (strength - 1) ** 2
             angle *= bias * strength_grad
 
-        qml.RY(angle, wires=i)
+            qml.RY(angle, wires=i)
 
 
 class CDLayerNull:
     def __call__(self, strength: float, strength_grad: float) -> None:  # noqa: ARG002
-        return None
+        """Do nothing."""
+        return
 
 
 class CDLayerYZY:
     def __init__(self, bias_terms: ArrayLike, interactions: ArrayLike) -> None:
+        """Init the CDLayerYZY.
+
+        Args:
+            bias_terms: 1D-ArrayLike representing the bias terms of a Lenz-Ising
+                problem. These are the linear terms of the problem.
+            interactions: 2D-ArrayLike representing the interaction terms of the
+                Lenz-Ising problem. These are the quadratic terms of the problem.
+        """
         self._bias_terms = np.asarray(bias_terms, dtype=np.float64)
         self._interactions = np.asarray(interactions, dtype=np.float64)
 
@@ -88,6 +201,7 @@ class CDLayerYZY:
 
     @property
     def n_qubits(self) -> int:
+        """Number of qubits used by the circuit."""
         return len(self._bias_terms)
 
     @staticmethod

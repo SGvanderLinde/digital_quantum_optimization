@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pennylane as qml
-
 from dqao import QUBO, benchmarking, optimize_cdqo_gridsearch
 from dqao import CounterDiabaticQuantumOptimizer as CDQOptimizer
 

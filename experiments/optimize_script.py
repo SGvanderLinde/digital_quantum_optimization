@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
 import pennylane as qml
-
 from dqao import QUBO, optimize_cdqo
 from dqao import CounterDiabaticQuantumOptimizer as CDQOptimizer
 
