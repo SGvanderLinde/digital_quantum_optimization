@@ -50,7 +50,6 @@ class CounterDiabaticQuantumOptimizer:
 
         [1] Hegade, N. N., Chen, X., & Solano, E. (2022). Digitized counterdiabatic
         quantum optimization. Physical Review Research, 4(4), L042030.
-
         """
         self._n_layers = int(n_layers)
         self._device = device

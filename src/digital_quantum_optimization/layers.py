@@ -116,13 +116,16 @@ class InitialLayer:
 
 class CDLayerY:
     def __init__(self, bias_terms: ArrayLike, interactions: ArrayLike) -> None:
-        """Init the CDLayerY.
+        """Init the CDLayerY as described in [1].
 
         Args:
             bias_terms: 1D-ArrayLike representing the bias terms of a Lenz-Ising
                 problem. These are the linear terms of the problem.
             interactions: 2D-ArrayLike representing the interaction terms of the
                 Lenz-Ising problem. These are the quadratic terms of the problem.
+
+        [1] Hegade, N. N., Chen, X., & Solano, E. (2022). Digitized counterdiabatic
+        quantum optimization. Physical Review Research, 4(4), L042030.
         """
         self._bias_terms = np.asarray(bias_terms, dtype=np.float64)
         self._interactions = np.asarray(interactions, dtype=np.float64)
@@ -177,13 +180,16 @@ class CDLayerNull:
 
 class CDLayerYZY:
     def __init__(self, bias_terms: ArrayLike, interactions: ArrayLike) -> None:
-        """Init the CDLayerYZY.
+        """Init the CDLayerYZY as described in [1].
 
         Args:
             bias_terms: 1D-ArrayLike representing the bias terms of a Lenz-Ising
                 problem. These are the linear terms of the problem.
             interactions: 2D-ArrayLike representing the interaction terms of the
                 Lenz-Ising problem. These are the quadratic terms of the problem.
+
+        [1] Hegade, N. N., Chen, X., & Solano, E. (2022). Digitized counterdiabatic
+        quantum optimization. Physical Review Research, 4(4), L042030.
         """
         self._bias_terms = np.asarray(bias_terms, dtype=np.float64)
         self._interactions = np.asarray(interactions, dtype=np.float64)
